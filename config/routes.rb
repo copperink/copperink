@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  devise_for :users
-
-
   root to: 'api/base#index'
 
   namespace :api, defaults: { format: :json } do
@@ -9,7 +6,13 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       root to: 'base#index'
-      get 'auth' => 'base#needs_auth'
+
+      scope :sessions do
+        match '/'             => 'sessions#index',          via: :GET
+        match '/sign-in/'     => 'sessions#signin',         via: :POST
+        match '/sign-up/'     => 'sessions#signup',         via: :POST
+      end
     end
+
   end
 end

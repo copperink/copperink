@@ -6,6 +6,8 @@ class User
 
   before_save :ensure_auth_token
 
+  validates :name, presence: true
+
 
 
   # Get Public Auth Token
@@ -16,16 +18,11 @@ class User
 
   # Authenticate User by Token
   def self.authenticate(token)
-    if token
-      id, token = token.split(TOKEN_DELIMITER)
-      user = User.where(id: id).first
+    id, token = token.try(:split, TOKEN_DELIMITER)
+    user = User.where(id: id).first
 
-      if user && Devise.secure_compare(user.auth_token, token)
-        user
-      else
-        false
-      end
-
+    if user && Devise.secure_compare(user.auth_token, token)
+      user
     else
       false
     end
@@ -60,6 +57,7 @@ class User
          :recoverable, :rememberable, :trackable, :validatable
 
   ## Database authenticatable
+  field :name,               type: String
   field :email,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
   field :auth_token,         type: String
