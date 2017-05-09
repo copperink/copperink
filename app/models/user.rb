@@ -4,6 +4,8 @@ class User
 
   TOKEN_DELIMITER = ':'
 
+  has_many :accounts
+
   before_save :ensure_auth_token
 
   validates :name, presence: true

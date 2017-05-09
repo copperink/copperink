@@ -1,4 +1,4 @@
-class SocialService::Facebook < SocialService::Base
+class SocialService::Facebook
   TYPE            = :facebook
   POST_PERMISSION = 'CREATE_CONTENT'.freeze
   PICTURE_FIELD   = 'picture.type(large){url}'.freeze
@@ -24,7 +24,7 @@ class SocialService::Facebook < SocialService::Base
 
 
   # Get Token Details
-  def self.get_token_details(token)
+  def self.token_details(token)
     graph(token)
       .get_object('debug_token', input_token: token)['data']
       .deep_symbolize_keys

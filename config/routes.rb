@@ -9,15 +9,24 @@ Rails.application.routes.draw do
       root to: 'base#index'
 
       scope :sessions do
-        match '/'             => 'sessions#index',          via: :GET
-        match '/sign-in/'     => 'sessions#signin',         via: :POST
-        match '/sign-up/'     => 'sessions#signup',         via: :POST
+        get  '/'              => 'sessions#index'
+        post '/sign-in/'      => 'sessions#signin'
+        post '/sign-up/'      => 'sessions#signup'
       end
+
+      namespace :accounts do
+        scope :facebook do
+          post '/list/'       => 'facebook#list'
+          post '/create/'     => 'facebook#create'
+        end
+      end
+
     end
   end
 
 
-  # Devise Setup for Users
+  # Setup Devise for Users without
+  # any routes
   devise_for :users, skip: :all
 
 end
