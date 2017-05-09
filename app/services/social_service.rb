@@ -6,7 +6,7 @@ class SocialService
 
   def self.types
     @types ||=
-      ALLOWED.map { |ss| ss.to_sym }
+      ALLOWED.map { |ss| ss::TYPE }
   end
 
 end

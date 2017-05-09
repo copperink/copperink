@@ -1,18 +1,18 @@
 class SocialService::Facebook < SocialService::Base
+  TYPE            = :facebook
   POST_PERMISSION = 'CREATE_CONTENT'.freeze
   PICTURE_FIELD   = 'picture.type(large){url}'.freeze
   ACCOUNT_FIELDS  = %W(id name #{PICTURE_FIELD} accounts{access_token,name,perms,#{PICTURE_FIELD}}).freeze
   ACCOUNT_TYPES   = %w(profile, :page).freeze
 
 
-  def self.to_sym;   :facebook;   end
+  # TODO: Validate tokens for required permissions
 
 
+  # Gets the Profile and 'Postable' Pages for a User Token
   def self.accounts(token)
-    data =
-      Koala::Facebook::API
-        .new(token)
-        .get_object('me', fields: ACCOUNT_FIELDS)
+    data = graph(token).get_object('me', fields: ACCOUNT_FIELDS)
+    data['access_token'] = token
 
     accounts =
       data['accounts']['data']
@@ -20,6 +20,26 @@ class SocialService::Facebook < SocialService::Base
         .map    { |a| normalize_account_data(a, 'page')    }
 
     accounts.unshift(normalize_account_data(data))
+  end
+
+
+  # Get Token Details
+  def self.get_token_details(token)
+    graph(token)
+      .get_object('debug_token', input_token: token)['data']
+      .deep_symbolize_keys
+  end
+
+
+  # New Graph Object for token
+  def self.graph(token)
+    Koala::Facebook::API.new(token)
+  end
+
+
+  # Renews a Facebook Token
+  def self.renew_token(token)
+    Koala::Facebook::OAuth.new.exchange_access_token(token)
   end
 
 
