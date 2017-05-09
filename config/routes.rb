@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   root to: 'api/base#index'
 
   namespace :api, defaults: { format: :json } do
@@ -13,6 +14,10 @@ Rails.application.routes.draw do
         match '/sign-up/'     => 'sessions#signup',         via: :POST
       end
     end
-
   end
+
+
+  # Devise Setup for Users
+  devise_for :users, skip: :all
+
 end
