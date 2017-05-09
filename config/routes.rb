@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       namespace :accounts do
         scope :facebook do
           post '/list/'       => 'facebook#list'
-          post '/create/'     => 'facebook#create'
+          post '/save/'       => 'facebook#save'
         end
       end
 

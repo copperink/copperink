@@ -18,10 +18,34 @@ class API::V1::Accounts::FacebookController < API::V1::BaseController
 
 
 
+  # Saves passed account objects to DB
+  def save
+    Account.create!(account_params.map do |data|
+      {
+        type: :facebook,
+        user: current_user,
+        name: data[:name],
+        data: data
+      }
+    end)
+
+    render json: {}
+  end
+
+
+
   private
 
   def token_params
     params.require(:facebook).require(:token)
+  end
+
+  def account_params
+    params
+      .permit(accounts: [:id, :name, :image, :token, :type])
+      .require(:accounts)
+      .map(&:to_h)
+      .map(&:symbolize_keys)
   end
 
 
