@@ -1,2 +1,0 @@
-class SocialService::Base
-end
