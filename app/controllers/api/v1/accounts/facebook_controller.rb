@@ -45,7 +45,7 @@ class API::V1::Accounts::FacebookController < API::V1::BaseController
       .permit(accounts: [:id, :name, :image, :token, :type])
       .require(:accounts)
       .map(&:to_h)
-      .map(&:symbolize_keys)
+      .map(&:deep_symbolize_keys)
   end
 
 
