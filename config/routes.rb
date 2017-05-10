@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       end
 
       namespace :accounts do
+        get '/'               => 'accounts#index'
+
         scope :facebook do
           post '/list/'       => 'facebook#list'
           post '/save/'       => 'facebook#save'

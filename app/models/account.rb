@@ -16,4 +16,14 @@ class Account
     self.data[:image]
   end
 
+
+  def to_h
+    {
+      id:     self.id.to_s,
+      name:   self.name,
+      type:   self.type.to_s,
+      image:  self.image_url
+    }
+  end
+
 end
