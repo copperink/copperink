@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   root to: 'api/base#index'
 
   namespace :api, defaults: { format: :json } do
@@ -8,11 +9,26 @@ Rails.application.routes.draw do
       root to: 'base#index'
 
       scope :sessions do
-        match '/'             => 'sessions#index',          via: :GET
-        match '/sign-in/'     => 'sessions#signin',         via: :POST
-        match '/sign-up/'     => 'sessions#signup',         via: :POST
+        get  '/'              => 'sessions#index'
+        post '/sign-in/'      => 'sessions#signin'
+        post '/sign-up/'      => 'sessions#signup'
       end
-    end
 
+      namespace :accounts do
+        get '/'               => 'accounts#index'
+
+        scope :facebook do
+          post '/list/'       => 'facebook#list'
+          post '/save/'       => 'facebook#save'
+        end
+      end
+
+    end
   end
+
+
+  # Setup Devise for Users without
+  # any routes
+  devise_for :users, skip: :all
+
 end

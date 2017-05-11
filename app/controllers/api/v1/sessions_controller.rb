@@ -12,7 +12,7 @@ class API::V1::SessionsController < API::V1::BaseController
     user = User.find_for_authentication(email: session_params[:email])
 
     if user && user.valid_password?(session_params[:password])
-      render json: { auth_token: user.authentication_token }
+      render json: user_response(user)
     else
       render_401('incorrect email or password')
     end
@@ -23,7 +23,7 @@ class API::V1::SessionsController < API::V1::BaseController
     user = User.new(session_params)
 
     if user.save
-      render json: { auth_token: user.authentication_token }
+      render json: user_response(user)
     else
       render_object_errors(user)
     end
@@ -35,6 +35,15 @@ class API::V1::SessionsController < API::V1::BaseController
 
   def session_params
     params.require(:user).permit(:name, :email, :password)
+  end
+
+  def user_response(user)
+    {
+      id:    user.id.to_s,
+      name:  user.name,
+      email: user.email,
+      token: user.authentication_token
+    }
   end
 
 end
