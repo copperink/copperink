@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       root to: 'base#index'
 
+      resources :posts, only: [:index, :create, :destroy]
+
       scope :sessions do
         get  '/'              => 'sessions#index'
         post '/sign-in/'      => 'sessions#signin'

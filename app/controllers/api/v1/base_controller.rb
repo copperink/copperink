@@ -9,4 +9,9 @@ class API::V1::BaseController < API::BaseController
     render json: { active: true }
   end
 
+
+  def success
+    { status: 'success' }
+  end
+
 end

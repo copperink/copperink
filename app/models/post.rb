@@ -15,6 +15,18 @@ class Post
   validates :post_at, presence: true, timeliness: { after: DateTime.now }
 
 
+  def to_h
+    {
+      id:         self.id.to_s,
+      content:    self.content,
+      post_at:    self.post_at.to_i,
+      status:     self.status.to_s,
+      author_id:  self.author_id.to_s,
+      account_id: self.account_id.to_s
+    }
+  end
+
+
   def post!
     raise "Already Posted" if self.status == :posted
 
