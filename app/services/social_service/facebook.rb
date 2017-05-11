@@ -43,6 +43,18 @@ class SocialService::Facebook
   end
 
 
+  # Post a Status to Facebook
+  def self.post_status(account, status)
+    graph(account.data[:token]).put_wall_post(status)
+  end
+
+
+  # Post an Image to Facebook
+  def self.post_image(account, image, status = nil)
+    graph(account.data[:token]).put_picture(image, caption: status)
+  end
+
+
 
   private
 
