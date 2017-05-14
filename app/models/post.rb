@@ -15,10 +15,11 @@ class Post
   field :post_at,   type: DateTime
   field :job_id,    type: String
 
-  validates :status,  presence: true, inclusion:  { in:    STATUSES     }
-  validates :post_at, presence: true, timeliness: { after: DateTime.now }
+  validates :status,  presence: true, inclusion: { in: STATUSES }
+  validates :post_at, presence: true
 
   before_save :add_to_queue
+  before_destroy :delete_job
 
 
   def to_h
@@ -38,31 +39,34 @@ class Post
     raise "Already Posted" if self.status == :posted
 
     begin
-      #SocialService
-      #  .new(self.account)
-      #  .post_status(self.content)
-
-      puts "\n---------------------"
-      puts "Simulating SocialService "
-      puts "Posting for id: #{self.id}"
-      puts "---------------------\n\n"
+      if image
+        SocialService.new(account).post_image(image, self.content)
+      else
+        SocialService.new(self.account).post_status(self.content)
+      end
 
       update(status: :posted)
 
-    rescue Koala::Facebook::ClientError => e
+    rescue => e
       logger.error(e)
       update(status: :error)
+      raise e
     end
   end
 
 
-  def add_to_queue
-    if self.status != :posted
-      if self.job_id && job = Sidekiq::ScheduledSet.new.find_job(self.job_id)
-        job.delete
-      end
 
+  def add_to_queue
+    if self.status == :queued
+      self.delete_job
       self.job_id = SocialWorker.perform_at(self.post_at, self.id.to_s)
+    end
+  end
+
+
+  def delete_job
+    if self.job_id && job = Sidekiq::ScheduledSet.new.find_job(self.job_id)
+      job.delete
     end
   end
 

@@ -51,7 +51,13 @@ class SocialService::Facebook
 
   # Post an Image to Facebook
   def self.post_image(account, image, status = nil)
-    graph(account.data[:token]).put_picture(image, caption: status)
+    client = graph(account.data[:token])
+
+    if image.is_a?(ImageAttachment)
+      client.put_picture(image.data.path, image.data.content_type, caption: status)
+    else
+      client.put_picture(image, caption: status)
+    end
   end
 
 

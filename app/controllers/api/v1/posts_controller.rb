@@ -11,18 +11,25 @@ class API::V1::PostsController < API::V1::BaseController
 
   # Create new Post
   def create
-    post = Post.new(
-      author:     current_user,
-      content:    post_params[:content],
-      account_id: post_params[:account_id],
-      post_at:    datetime(post_params[:post_at])
-    )
+    post = Post.new(post_params)
 
     if post.save
       ImageAttachment.create!(imageable: post, data: image) if image.present?
       render json: { post: post.to_h }
     else
       render_object_errors(post)
+    end
+  end
+
+
+  # Update a post
+  def update
+    post = Post.find(params[:id])
+
+    if post.update(post_params)
+      render json: { post: post.to_h }
+    else
+      render_object_errors
     end
   end
 
@@ -44,7 +51,14 @@ class API::V1::PostsController < API::V1::BaseController
   private
 
   def post_params
-    params.require(:post).permit(:content, :post_at, :account_id, :image)
+    attrs = params.require(:post).permit(:content, :post_at, :account_id)
+
+    {
+      author:     current_user,
+      content:    attrs[:content],
+      account_id: attrs[:account_id],
+      post_at:    datetime(attrs[:post_at])
+    }
   end
 
   def image

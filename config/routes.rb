@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       root to: 'base#index'
 
-      resources :posts, only: [:index, :create, :destroy]
+      resources :posts, only: [:index, :create, :update, :destroy]
 
       scope :sessions do
         get  '/'              => 'sessions#index'
