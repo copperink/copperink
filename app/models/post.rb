@@ -1,6 +1,7 @@
 class Post
   include Mongoid::Document
   include Mongoid::Timestamps
+  include HasOneImage
 
   STATUSES = %i(queued posted error)
 
