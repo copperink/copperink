@@ -11,11 +11,13 @@ class ImageAttachment
   has_mongoid_attached_file :data,
     styles: {
       thumb:  '120x120#',
-      small:  '250x250>'
+      small:  '250x250>',
+      medium: '600x600>'
     },
     convert_options: {
       thumb:  '-quality 75 -strip',
-      small:  '-quality 75 -strip'
+      small:  '-quality 75 -strip',
+      medium: '-quality 90 -strip'
     }
 
   default_scope { oldest_first }

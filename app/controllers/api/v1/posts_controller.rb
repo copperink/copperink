@@ -19,6 +19,7 @@ class API::V1::PostsController < API::V1::BaseController
     )
 
     if post.save
+      ImageAttachment.create!(imageable: post, data: image) if image.present?
       render json: { post: post.to_h }
     else
       render_object_errors(post)
@@ -43,7 +44,11 @@ class API::V1::PostsController < API::V1::BaseController
   private
 
   def post_params
-    params.require(:post).permit(:content, :post_at, :account_id)
+    params.require(:post).permit(:content, :post_at, :account_id, :image)
+  end
+
+  def image
+    params[:image_data]
   end
 
   def datetime(timestamp)

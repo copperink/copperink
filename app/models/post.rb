@@ -23,7 +23,8 @@ class Post
       post_at:    self.post_at.to_i,
       status:     self.status.to_s,
       author_id:  self.author_id.to_s,
-      account_id: self.account_id.to_s
+      account_id: self.account_id.to_s,
+      image:      self.image_url
     }
   end
 
