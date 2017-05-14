@@ -29,7 +29,7 @@ class API::V1::Accounts::FacebookController < API::V1::BaseController
       }
     end)
 
-    render json: {}
+    render json: success
   end
 
 

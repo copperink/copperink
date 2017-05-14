@@ -4,6 +4,7 @@ module JSONErrors
   included do
     rescue_from StandardError,                      with: :render_500
     rescue_from ActionController::ParameterMissing, with: :render_400
+    rescue_from Mongoid::Errors::DocumentNotFound,  with: :document_not_found
 
 
     def render_400(errors = 'required parameters invalid')
@@ -45,6 +46,14 @@ module JSONErrors
       else
         render_errors(obj, status)
       end
+    end
+
+
+
+    private
+
+    def document_not_found(error)
+      render_404('not found')
     end
 
   end

@@ -3,15 +3,19 @@ source 'https://rubygems.org'
 
 gem 'rails',        '~> 5.0.2'
 gem 'puma',         '~> 3.0'
-gem 'mongoid',      '~> 6.0.0'
+gem 'mongoid',      '~> 6.1.0'
 gem 'devise'
 gem 'koala'
+gem 'sidekiq'
+gem 'mongoid-paperclip', require: 'mongoid_paperclip'
 
 
 gem 'uglifier',     '>= 1.3.0'
 gem 'sass-rails',   '~> 5.0'
 gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
+
+gem 'validates_timeliness', '~> 4.0'
 
 
 group :development, :test do
