@@ -6,6 +6,7 @@ gem 'puma',         '~> 3.0'
 gem 'mongoid',      '~> 6.1.0'
 gem 'devise'
 gem 'koala'
+gem 'sidekiq'
 gem 'mongoid-paperclip', require: 'mongoid_paperclip'
 
 
